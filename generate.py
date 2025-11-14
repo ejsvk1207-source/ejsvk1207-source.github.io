@@ -1,14 +1,16 @@
 import os
 
-# =====================================
-# 0. AdSense Auto Ads Code (빈칸 유지 가능)
-# =====================================
+# ==============================
+# 0. AdSense 코드 (지금은 비워두고, 승인나면 안에 붙여넣기)
+# ==============================
 ADSENSE_SNIPPET = """
 """
 
-# =====================================
-# 1. TEMPLATE / SCRIPT / STYLE
-# =====================================
+SITE_URL = "https://ejsvk1207-source.github.io"
+
+# ==============================
+# 1. 템플릿 / 스크립트 / 스타일
+# ==============================
 
 TEMPLATE_HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -18,7 +20,7 @@ TEMPLATE_HTML = """<!DOCTYPE html>
 <meta name="description" content="{{DESCRIPTION}}">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {{ADSENSE_SNIPPET}}
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -63,7 +65,9 @@ TEMPLATE_HTML = """<!DOCTYPE html>
   <footer>
     <p>
       Part of the Global Salary Calculators project —
-      <a href="../index.html">Back to index</a>
+      <a href="index.html">Back to index</a> ·
+      <a href="privacy.html">Privacy Policy</a> ·
+      <a href="disclaimer.html">Disclaimer</a>
     </p>
   </footer>
 </main>
@@ -74,8 +78,7 @@ TEMPLATE_HTML = """<!DOCTYPE html>
     "social_rate": {{SOCIAL_RATE}}
   };
 </script>
-
-<script src="../script.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
@@ -89,6 +92,8 @@ SCRIPT_JS = """document.addEventListener("DOMContentLoaded", () => {
   const netM = document.getElementById("netMonthly");
   const netW = document.getElementById("netWeekly");
 
+  if (!form) return;
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     let g = Number(document.getElementById("grossYearly").value);
@@ -100,8 +105,8 @@ SCRIPT_JS = """document.addEventListener("DOMContentLoaded", () => {
 
     let net = total * (1 - rate);
     netY.textContent = net.toLocaleString();
-    netM.textContent = (net/12).toLocaleString();
-    netW.textContent = (net/52).toLocaleString();
+    netM.textContent = (net / 12).toLocaleString();
+    netW.textContent = (net / 52).toLocaleString();
 
     result.classList.remove("hidden");
   });
@@ -141,9 +146,42 @@ button:hover { background: #0059d1; }
 a { color: #0070f3; }
 """
 
-# =====================================
-# 2. COUNTRIES + 100 JOBS
-# =====================================
+README_CONTENT = """# Global Salary Calculators
+
+Static salary calculator site for many countries and jobs.
+Generated automatically by generate.py and hosted on GitHub Pages.
+
+Site URL: https://ejsvk1207-source.github.io
+"""
+
+PRIVACY_HTML = """<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Privacy Policy</title></head>
+<body>
+<h1>Privacy Policy</h1>
+<p>This website may use third-party advertising networks such as Google AdSense.</p>
+<p>These networks may use cookies to personalize and measure ads. We do not store
+personally identifiable information on this site. Any salary values you enter are
+processed only in your browser.</p>
+<p>For more information, see Google&apos;s privacy policy.</p>
+<p><a href="index.html">Back to main page</a></p>
+</body></html>
+"""
+
+DISCLAIMER_HTML = """<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Disclaimer</title></head>
+<body>
+<h1>Disclaimer</h1>
+<p>All salary calculators on this site use simplified average tax and social
+contribution rates. Real results may differ significantly.</p>
+<p>Nothing on this site is financial, legal, or tax advice. Please consult official
+resources or a professional advisor for accurate information.</p>
+<p><a href="index.html">Back to main page</a></p>
+</body></html>
+"""
+
+# ==============================
+# 2. 데이터 (국가 / 직업)
+# ==============================
 
 COUNTRIES = [
     {"code": "us", "name": "United States", "currency": "USD", "tax_rate": 0.22, "social_rate": 0.076},
@@ -172,7 +210,7 @@ JOBS = [
     "Pilot","Bank Teller","Financial Analyst","Insurance Agent","Farmer","Fisherman","Warehouse Worker",
     "Delivery Driver","Barber","Hair Stylist","Makeup Artist","Painter","Photographer","Translator",
     "Interpreter","Writer","Editor","Journalist","Real Estate Agent","Architect","Civil Engineer",
-    "Software Tester","Quality Assurance Specialist","UI/UX Designer","Content Creator","Social Media Manager",
+    "Software Tester","Quality Assurance Specialist","UI UX Designer","Content Creator","Social Media Manager",
     "SEO Specialist","Security Guard","Firefighter","Police Officer","Paramedic","Car Mechanic","Bus Driver",
     "Train Operator","Machine Operator","Miner","Oil Rig Worker","Teacher Assistant","Kindergarten Teacher",
     "University Professor","Research Assistant","Librarian","Veterinarian","Animal Care Worker","Scientist",
@@ -180,6 +218,10 @@ JOBS = [
     "HR Manager","Recruiter","Business Consultant","Entrepreneur","Cafe Manager","Store Manager","Courier",
     "Logistics Coordinator","Network Engineer","Cloud Engineer","AI Engineer","ML Engineer","DevOps Engineer"
 ]
+
+# ==============================
+# 3. 유틸 함수
+# ==============================
 
 def slugify(text):
     return (
@@ -191,79 +233,82 @@ def slugify(text):
         .replace(".", "")
     )
 
-# =====================================
-# 3. WRITE FILE UTILITY
-# =====================================
-
 def write(path, content):
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
 
-# =====================================
-# 4. MAIN PAGE GENERATOR
-# =====================================
+# ==============================
+# 4. 메인 로직
+# ==============================
 
 def main():
-    os.makedirs("docs", exist_ok=True)
+    # 공통 파일
     write("template.html", TEMPLATE_HTML)
     write("script.js", SCRIPT_JS)
     write("style.css", STYLE_CSS)
+    write("README.md", README_CONTENT)
 
     calculators = []
-    template = TEMPLATE_HTML.replace("{{ADSENSE_SNIPPET}}", ADSENSE_SNIPPET)
+    template = TEMPLATE_HTML.replace("{{ADSENSE_SNIPPET}}", ADSENSE_SNIPPET.strip())
 
-    # PAGE GENERATION
+    # 계산기 페이지 생성 (루트에 바로 생성)
     for c in COUNTRIES:
         for j in JOBS:
             slug = f"{c['code']}-{slugify(j)}-salary-calculator"
+            filename = f"{slug}.html"
             title = f"{c['name']} {j} Net Salary Calculator"
-            desc = f"Calculate take-home pay for a {j} in {c['name']}."
+            desc = f"Calculate simplified take-home pay for a {j} in {c['name']}."
 
-            html = template.replace("{{TITLE}}", title)\
-                .replace("{{DESCRIPTION}}", desc)\
-                .replace("{{COUNTRY}}", c["name"])\
-                .replace("{{JOB}}", j)\
-                .replace("{{CURRENCY}}", c["currency"])\
-                .replace("{{TAX_RATE}}", str(c["tax_rate"]))\
+            html = (
+                template
+                .replace("{{TITLE}}", title)
+                .replace("{{DESCRIPTION}}", desc)
+                .replace("{{COUNTRY}}", c["name"])
+                .replace("{{JOB}}", j)
+                .replace("{{CURRENCY}}", c["currency"])
+                .replace("{{TAX_RATE}}", str(c["tax_rate"]))
                 .replace("{{SOCIAL_RATE}}", str(c["social_rate"]))
+            )
 
-            write(f"docs/{slug}.html", html)
+            write(filename, html)
+            calculators.append({"slug": slug, "title": title, "country": c["name"], "job": j})
 
-            calculators.append({"slug": slug, "country": c["name"], "job": j, "title": title})
-
-    # INDEX
+    # index.html
     calculators.sort(key=lambda x: (x["country"], x["job"]))
-    index_html = "<html><body><h1>Global Salary Calculators</h1><ul>"
+    index_html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Global Salary Calculators</title>"
+    index_html += "<meta name='description' content='Simplified net salary calculators for many jobs and countries.'>"
+    index_html += "<link rel='stylesheet' href='style.css'></head><body>"
+    index_html += "<header><h1>Global Salary Calculators</h1></header><main>"
+    index_html += "<section><p>Select a calculator below.</p></section><section><ul>"
+
     for m in calculators:
-        index_html += f'<li><a href="{m["slug"]}.html">{m["title"]}</a></li>'
-    index_html += """
-</ul>
-<p><a href="privacy.html">Privacy Policy</a> | <a href="disclaimer.html">Disclaimer</a></p>
-</body></html>
-"""
-    write("docs/index.html", index_html)
+        index_html += f"<li><a href='{m['slug']}.html'>{m['title']}</a></li>"
 
-    # PRIVACY
-    write("docs/privacy.html", "<html><body><h1>Privacy Policy</h1>This site uses AdSense.</body></html>")
+    index_html += "</ul></section>"
+    index_html += "<p><a href='privacy.html'>Privacy Policy</a> · <a href='disclaimer.html'>Disclaimer</a></p>"
+    index_html += "</main></body></html>"
 
-    # DISCLAIMER
-    write("docs/disclaimer.html", "<html><body><h1>Disclaimer</h1>Simplified salary estimation only.</body></html>")
+    write("index.html", index_html)
 
-    # SITEMAP
-    SITE = "https://ejsvk1207-source.github.io/global-salary-calculators"
-    sm = "<urlset>"
+    # privacy / disclaimer
+    write("privacy.html", PRIVACY_HTML)
+    write("disclaimer.html", DISCLAIMER_HTML)
+
+    # sitemap.xml
+    sitemap = "<?xml version='1.0' encoding='UTF-8'?>\n<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\n"
+    sitemap += f"  <url><loc>{SITE_URL}/</loc></url>\n"
     for m in calculators:
-        sm += f"<url><loc>{SITE}/{m['slug']}.html</loc></url>"
-    sm += "</urlset>"
-    write("docs/sitemap.xml", sm)
+        sitemap += f"  <url><loc>{SITE_URL}/{m['slug']}.html</loc></url>\n"
+    sitemap += f"  <url><loc>{SITE_URL}/privacy.html</loc></url>\n"
+    sitemap += f"  <url><loc>{SITE_URL}/disclaimer.html</loc></url>\n"
+    sitemap += "</urlset>\n"
+    write("sitemap.xml", sitemap)
 
-    # ROBOTS
-    write("docs/robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml")
+    # robots.txt
+    robots = f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n"
+    write("robots.txt", robots)
 
-    # README
-    write("README.md", "# Global Salary Calculators\nAuto-generated salary pages.")
-
-    print("DONE — All pages generated successfully!")
+    print("DONE: all pages generated in repo root.")
 
 if __name__ == "__main__":
     main()

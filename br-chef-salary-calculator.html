@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brazil Chef Net Salary Calculator</title>
+<meta name="description" content="Calculate simplified take-home pay for a Chef in Brazil.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Brazil Chef Net Salary Calculator</h1>
+  <p class="subtitle">Brazil · Chef · BRL</p>
+</header>
+
+<main>
+  <section class="intro">
+    <p>Calculate simplified take-home pay for a Chef in Brazil.</p>
+    <p class="disclaimer">
+      This tool gives a simplified estimate of take-home salary.
+      Real tax systems are more complex and vary by region.
+    </p>
+  </section>
+
+  <section class="calculator">
+    <h2>Enter your salary</h2>
+    <form id="salary-form">
+      <label>
+        Gross yearly salary (BRL):
+        <input type="number" id="grossYearly" required min="0" step="100">
+      </label>
+
+      <label>
+        Optional yearly bonus (BRL):
+        <input type="number" id="bonusYearly" min="0" step="100">
+      </label>
+
+      <button type="submit">Calculate net salary</button>
+    </form>
+
+    <div id="result" class="result hidden">
+      <h2>Estimated take-home pay</h2>
+      <p>Yearly net: <span id="netYearly"></span> BRL</p>
+      <p>Monthly net: <span id="netMonthly"></span> BRL</p>
+      <p>Weekly net: <span id="netWeekly"></span> BRL</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      Part of the Global Salary Calculators project —
+      <a href="index.html">Back to index</a> ·
+      <a href="privacy.html">Privacy Policy</a> ·
+      <a href="disclaimer.html">Disclaimer</a>
+    </p>
+  </footer>
+</main>
+
+<script>
+  window.calculatorConfig = {
+    "tax_rate": 0.17,
+    "social_rate": 0.11
+  };
+</script>
+<script src="script.js"></script>
+
+</body>
+</html>

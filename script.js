@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const netM = document.getElementById("netMonthly");
   const netW = document.getElementById("netWeekly");
 
+  if (!form) return;
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     let g = Number(document.getElementById("grossYearly").value);
@@ -17,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let net = total * (1 - rate);
     netY.textContent = net.toLocaleString();
-    netM.textContent = (net/12).toLocaleString();
-    netW.textContent = (net/52).toLocaleString();
+    netM.textContent = (net / 12).toLocaleString();
+    netW.textContent = (net / 52).toLocaleString();
 
     result.classList.remove("hidden");
   });

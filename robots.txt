@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ejsvk1207-source.github.io/sitemap.xml
