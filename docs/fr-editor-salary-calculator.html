@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>France Editor Net Salary Calculator</title>
+<meta name="description" content="Calculate take-home pay for a Editor in France.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+  <h1>France Editor Net Salary Calculator</h1>
+  <p class="subtitle">France · Editor · EUR</p>
+</header>
+
+<main>
+  <section class="intro">
+    <p>Calculate take-home pay for a Editor in France.</p>
+    <p class="disclaimer">
+      This tool gives a simplified estimate of take-home salary.
+      Real tax systems are more complex and vary by region.
+    </p>
+  </section>
+
+  <section class="calculator">
+    <h2>Enter your salary</h2>
+    <form id="salary-form">
+      <label>
+        Gross yearly salary (EUR):
+        <input type="number" id="grossYearly" required min="0" step="100">
+      </label>
+
+      <label>
+        Optional yearly bonus (EUR):
+        <input type="number" id="bonusYearly" min="0" step="100">
+      </label>
+
+      <button type="submit">Calculate net salary</button>
+    </form>
+
+    <div id="result" class="result hidden">
+      <h2>Estimated take-home pay</h2>
+      <p>Yearly net: <span id="netYearly"></span> EUR</p>
+      <p>Monthly net: <span id="netMonthly"></span> EUR</p>
+      <p>Weekly net: <span id="netWeekly"></span> EUR</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      Part of the Global Salary Calculators project —
+      <a href="../index.html">Back to index</a>
+    </p>
+  </footer>
+</main>
+
+<script>
+  window.calculatorConfig = {
+    "tax_rate": 0.22,
+    "social_rate": 0.16
+  };
+</script>
+
+<script src="../script.js"></script>
+
+</body>
+</html>

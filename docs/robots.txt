@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ejsvk1207-source.github.io/global-salary-calculators/sitemap.xml
